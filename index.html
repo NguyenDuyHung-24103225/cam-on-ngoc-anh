@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cảm ơn Ngọc Anh ❤️</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe Script', 'Snell Roundhand', 'Dancing Script', 'Brush Script MT', 'Baskerville', 'Playfair Display', 'Caveat', cursive, serif, sans-serif;
+      background: radial-gradient(circle at 50% 50%, #ffe3eb 0%, #ffb6c8 45%, #ff94af 75%, #f67295 100%);
+      position: relative;
+      user-select: none;
+    }
+
+    /* Canvas cho trái tim bay */
+    #heartCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Khung thẻ kính mờ (Glassmorphism) */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 90%;
+      width: 480px;
+      padding: 40px 25px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 35px;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 
+        0 20px 50px rgba(235, 78, 128, 0.25),
+        0 0 25px rgba(255, 255, 255, 0.6) inset;
+      text-align: center;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    /* Trái tim chính ở giữa */
+    .big-heart-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .big-heart {
+      width: 85px;
+      height: 85px;
+      display: inline-block;
+      position: relative;
+      animation: pulseHeart 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      filter: drop-shadow(0 0 18px rgba(255, 51, 102, 0.6));
+      transition: transform 0.2s ease;
+    }
+
+    .big-heart:active {
+      transform: scale(0.9);
+    }
+
+    @keyframes pulseHeart {
+      0% {
+        transform: scale(1);
+      }
+      14% {
+        transform: scale(1.22);
+      }
+      28% {
+        transform: scale(1.05);
+      }
+      42% {
+        transform: scale(1.28);
+      }
+      70% {
+        transform: scale(1);
+      }
+    }
+
+    /* Tiêu đề chính */
+    .main-title {
+      font-size: 2.7rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #d81b60 0%, #ff1493 50%, #c2185b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 15px rgba(216, 27, 96, 0.2);
+      letter-spacing: 0.5px;
+    }
+
+    .heart-icon {
+      display: inline-block;
+      -webkit-text-fill-color: #ff2d55;
+      animation: wiggle 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-10deg) scale(1.15); }
+      75% { transform: rotate(10deg) scale(1.15); }
+    }
+
+    /* Đoạn tin nhắn cảm ơn */
+    .message {
+      font-size: 1.25rem;
+      color: #6a1b38;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      padding: 0 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+    }
+
+    .highlight {
+      font-weight: 600;
+      color: #e91e63;
+    }
+
+    /* Nút bấm thả tim bùng nổ */
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #ff4081, #f50057);
+      color: #ffffff;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(245, 0, 87, 0.35);
+      transition: all 0.3s ease;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 14px 30px rgba(245, 0, 87, 0.5);
+    }
+
+    .action-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Dòng hướng dẫn nhỏ */
+    .hint {
+      margin-top: 18px;
+      font-size: 0.88rem;
+      color: #9c4d69;
+      font-style: italic;
+      opacity: 0.85;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* Hiệu ứng tia sáng nền */
+    .glow-spot {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glow-1 {
+      width: 320px;
+      height: 320px;
+      background: rgba(255, 133, 179, 0.6);
+      top: 5%;
+      left: 10%;
+    }
+    .glow-2 {
+      width: 280px;
+      height: 280px;
+      background: rgba(255, 182, 193, 0.7);
+      bottom: 10%;
+      right: 10%;
+    }
+
+    /* Nốt nhạc / Âm thanh toggle */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+    .music-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Trái tim bung nở khi click */
+    .click-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      transform: translate(-50%, -50%);
+      animation: flyUp 1.2s forwards cubic-bezier(0.12, 0.8, 0.32, 1);
+    }
+
+    @keyframes flyUp {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+      }
+      50% {
+        transform: translate(calc(-50% + var(--dx)), calc(-50% - 70px)) scale(1.2) rotate(var(--rot));
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx) * 1.5), calc(-50% - 150px)) scale(1.4) rotate(var(--rot));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-title {
+        font-size: 2.2rem;
+      }
+      .message {
+        font-size: 1.1rem;
+      }
+      .container {
+        padding: 32px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Đốm sáng nền lung linh -->
+  <div class="glow-spot glow-1"></div>
+  <div class="glow-spot glow-2"></div>
+
+  <!-- Nút bật nhạc nhẹ -->
+  <div class="music-btn" id="musicToggle" title="Bật/Tắt giai điệu">🎵</div>
+
+  <!-- Canvas hiệu ứng trái tim bay lơ lửng -->
+  <canvas id="heartCanvas"></canvas>
+
+  <!-- Khung nội dung chính -->
+  <div class="container">
+    <div class="big-heart-wrapper" onclick="burstHearts()">
+      <svg class="big-heart" viewBox="0 0 32 29.6" fill="url(#heartGrad)">
+        <defs>
+          <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff3366" />
+            <stop offset="50%" stop-color="#ff5277" />
+            <stop offset="100%" stop-color="#ff0055" />
+          </linearGradient>
+        </defs>
+        <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+      </svg>
+    </div>
+
+    <h1 class="main-title">Cảm ơn Ngọc Anh <span class="heart-icon">❤️</span></h1>
+
+    <p class="message">
+      Cảm ơn <span class="highlight">Ngọc Anh</span> vì sự hiện diện ấm áp và đáng yêu của bạn. Chúc bạn luôn luôn ngập tràn niềm vui, hạnh phúc và những điều tuyệt vời nhất mỗi ngày! ✨🌸
+    </p>
+
+    <button class="action-btn" onclick="burstHearts(event)">
+      <span>Gửi ngàn trái tim</span>
+      <span>💖</span>
+    </button>
+
+    <div class="hint">✨ Chạm bất kỳ đâu trên màn hình để thả tim ✨</div>
+  </div>
+
+  <script>
+    // ===== HIỆU ỨNG TRÁI TIM BAY (CANVAS) =====
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const hearts = [];
+    const heartColors = [
+      'rgba(255, 75, 110, 0.7)',
+      'rgba(255, 105, 180, 0.75)',
+      'rgba(255, 140, 175, 0.65)',
+      'rgba(255, 182, 193, 0.8)',
+      'rgba(255, 51, 102, 0.7)',
+      'rgba(240, 98, 146, 0.6)'
+    ];
+
+    function drawHeart(x, y, size, color, alpha, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const topCurveHeight = size * 0.3;
+      ctx.moveTo(0, topCurveHeight);
+      // Nửa trái
+      ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+      ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size * 1.25);
+      // Nửa phải
+      ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+      ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    class FloatingHeart {
+      constructor() {
+        this.reset(true);
+      }
+      reset(initial = false) {
+        this.x = Math.random() * width;
+        this.y = initial ? Math.random() * height : height + 20;
+        this.size = Math.random() * 16 + 10;
+        this.speedY = Math.random() * 1.3 + 0.6;
+        this.speedX = (Math.random() - 0.5) * 0.7;
+        this.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+        this.alpha = Math.random() * 0.5 + 0.35;
+        this.rotation = (Math.random() - 0.5) * 0.4;
+        this.rotSpeed = (Math.random() - 0.5) * 0.015;
+      }
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX + Math.sin(this.y * 0.01) * 0.4;
+        this.rotation += this.rotSpeed;
+        if (this.y < -30) {
+          this.reset(false);
+        }
+      }
+      draw() {
+        drawHeart(this.x, this.y, this.size, this.color, this.alpha, this.rotation);
+      }
+    }
+
+    const heartCount = Math.min(Math.floor(window.innerWidth / 15), 55);
+    for (let i = 0; i < heartCount; i++) {
+      hearts.push(new FloatingHeart());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < hearts.length; i++) {
+        hearts[i].update();
+        hearts[i].draw();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // ===== CLICK / TAP ĐỂ BẮN TIM =====
+    const heartIcons = ['💖', '💕', '💗', '💓', '❤️', '🌸', '✨', '💝', '🥰'];
+
+    function createClickHeart(x, y) {
+      const el = document.createElement('div');
+      el.className = 'click-heart';
+      el.textContent = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.fontSize = (Math.random() * 18 + 22) + 'px';
+      el.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+      el.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+      document.body.appendChild(el);
+      setTimeout(() => {
+        el.remove();
+      }, 1200);
+    }
+
+    window.addEventListener('click', (e) => {
+      // Nếu bấm nút nhạc thì không tạo hiệu ứng
+      if (e.target.closest('#musicToggle')) return;
+      createClickHeart(e.clientX, e.clientY);
+      playSoftChime();
+    });
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches[0]) {
+        const touch = e.touches[0];
+        if (e.target.closest('#musicToggle')) return;
+        createClickHeart(touch.clientX, touch.clientY);
+        playSoftChime();
+      }
+    }, { passive: true });
+
+    // Bùng nổ nhiều trái tim khi bấm nút
+    function burstHearts(e) {
+      if (e) e.stopPropagation();
+      playMelody();
+      const originX = window.innerWidth / 2;
+      const originY = window.innerHeight / 2;
+      for (let i = 0; i < 28; i++) {
+        setTimeout(() => {
+          const offsetX = (Math.random() - 0.5) * 220;
+          const offsetY = (Math.random() - 0.5) * 220;
+          createClickHeart(originX + offsetX, originY + offsetY);
+        }, i * 35);
+      }
+    }
+
+    // ===== ÂM THANH DU DƯƠNG BẰNG WEB AUDIO API (KHÔNG CẦN TẢI FILE) =====
+    let audioCtx = null;
+    let isPlaying = false;
+    let melodyInterval = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, time, duration, gainVal = 0.08) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        // Âm sắc dạng sin kết hợp triangle mềm mại như celesta / music box
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gainNode.gain.setValueAtTime(0, time);
+        gainNode.gain.linearRampToValueAtTime(gainVal, time + 0.03);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc.start(time);
+        osc.stop(time + duration);
+      } catch (err) {}
+    }
+
+    function playSoftChime() {
+      try {
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const f = notes[Math.floor(Math.random() * notes.length)];
+        const ctx = getAudioContext();
+        playTone(f, ctx.currentTime, 0.7, 0.05);
+      } catch (e) {}
+    }
+
+    // Giai điệu nhẹ nhàng lãng mạn
+    const sweetMelodyNotes = [
+      523.25, 587.33, 659.25, 783.99, // C5, D5, E5, G5
+      880.00, 783.99, 659.25, 587.33, // A5, G5, E5, D5
+      659.25, 783.99, 1046.50, 880.00 // E5, G5, C6, A5
+    ];
+
+    function playMelody() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        sweetMelodyNotes.forEach((freq, idx) => {
+          playTone(freq, now + idx * 0.28, 0.6, 0.06);
+        });
+      } catch (e) {}
+    }
+
+    const musicBtn = document.getElementById('musicToggle');
+    musicBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const ctx = getAudioContext();
+      if (!isPlaying) {
+        isPlaying = true;
+        musicBtn.textContent = '💖';
+        musicBtn.style.background = '#ff4081';
+        musicBtn.style.color = '#fff';
+        playMelody();
+        melodyInterval = setInterval(playMelody, sweetMelodyNotes.length * 280 + 1200);
+      } else {
+        isPlaying = false;
+        musicBtn.textContent = '🎵';
+        musicBtn.style.background = 'rgba(255, 255, 255, 0.7)';
+        musicBtn.style.color = '#000';
+        clearInterval(melodyInterval);
+      }
+    });
+  </script>
+</body>
+</html>
